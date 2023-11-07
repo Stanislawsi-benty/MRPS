@@ -6,6 +6,7 @@ from py_interfaces.admin_main_ui import Ui_AdminWindowMain
 
 
 class EnterWindow(QtWidgets.QMainWindow, Ui_Enter):
+    '''Инициализация класса входа'''
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_Enter()
@@ -20,6 +21,7 @@ class EnterWindow(QtWidgets.QMainWindow, Ui_Enter):
         self.sign_db = CheckThread()
         self.sign_db.mysignal.connect(self.signal_handler)
 
+    '''функция проверки есть ли символы в полях логина и пароля'''
     def check_input(funct):
         def wrapper(self):
             for line_edit in self.base_line_edit:
@@ -29,22 +31,25 @@ class EnterWindow(QtWidgets.QMainWindow, Ui_Enter):
 
         return wrapper
 
+    '''Возвращает сигнал(окно) после авторизации и регистрации'''
     def signal_handler(self, value):
         QtWidgets.QMessageBox.about(self, 'Оповещение', value)
 
+    '''функция авторизации'''
     @check_input
     def auth(self):
         login = self.ui.lineEdit.text()
         password = self.ui.lineEdit_2.text()
         answer = self.sign_db.thr_login(login, password)
         if answer == 'Админ':
-            mywin.close()
+            signwindow.close()
             adminWindow.show()
         elif answer == 'Кассир':
             print("Кассир")
         elif answer == 'Клиент':
             print("Клиент")
 
+    '''функция регистрации'''
     @check_input
     def reg(self):
         login = self.ui.lineEdit.text()
@@ -56,22 +61,23 @@ class EnterWindow(QtWidgets.QMainWindow, Ui_Enter):
 
 
 class AdminWindow(QtWidgets.QMainWindow):
+    '''Инициализация класса вдмина'''
     def __init__(self):
         super().__init__()
         self.ui = Ui_AdminWindowMain()
         self.ui.setupUi(self)
 
-        self.ui.pushButton_add.clicked.connect(self.otsled)
+        self.ui.pushButton_add.clicked.connect(self.to_sign)
 
-    def otsled(self):
-        print("Взаимодействие с интерфейсом админа")
+    '''Функция выхода в окно входа'''
+    def to_sign(self):
         adminWindow.close()
-        mywin.show()
+        signwindow.show()
 
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    mywin = EnterWindow()
-    adminWindow = AdminWindow()
-    mywin.show()
+    signwindow = EnterWindow()  # Создание экземпляра окна входа
+    adminWindow = AdminWindow()  # Создание экземпляра окна админа
+    signwindow.show()
     sys.exit(app.exec())
