@@ -5,6 +5,7 @@ from py_interfaces.admin_ui import Ui_AdminWindow
 from py_interfaces.cashier_ui import Ui_CashierWindow
 from py_interfaces.client_ui import Ui_ClientWindow
 from Air_db.sign_db import check_user, sign_up
+from Admin import start
 
 app = QtWidgets.QApplication(sys.argv)
 
@@ -29,17 +30,20 @@ def enter():
     switch = check_user(data_in)
 
     if switch == 'Админ':
-        AdminWindow = QtWidgets.QMainWindow()
-        ui_admin = Ui_AdminWindow()
-        ui_admin.setupUi(AdminWindow)
         EnterWindow.close()
-        AdminWindow.show()
+        start()
 
-        def return_to_main():
-            AdminWindow.close()
-            EnterWindow.show()
-
-        ui_admin.pushButton.clicked.connect(return_to_main)
+        # AdminWindow = QtWidgets.QMainWindow()
+        # ui_admin = Ui_AdminWindow()
+        # ui_admin.setupUi(AdminWindow)
+        #
+        # AdminWindow.show()
+        #
+        # def return_to_main():
+        #     AdminWindow.close()
+        #     EnterWindow.show()
+        #
+        # ui_admin.pushButton.clicked.connect(return_to_main)
 
     elif switch == 'Кассир':
         CashierWindow = QtWidgets.QMainWindow()
