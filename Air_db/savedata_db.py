@@ -2,6 +2,7 @@ import sqlite3 as sq
 import pathlib
 from pathlib import Path
 
+
 class Save():
     def savedata(self, data):
         saveperson(data)

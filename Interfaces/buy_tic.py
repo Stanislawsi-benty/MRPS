@@ -11,6 +11,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
+
 class Ui_buy_tic(object):
     def setupUi(self, buy_tic):
         buy_tic.setObjectName("buy_tic")

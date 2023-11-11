@@ -3,6 +3,7 @@ from PyQt6.QtCore import pyqtSlot, Qt
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
+
 class Ui_vozv_tic(object):
     def setupUi(self, vozv_tic):
         vozv_tic.setObjectName("vozv_tic")
