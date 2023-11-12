@@ -93,6 +93,7 @@ class BuyTicket(QtWidgets.QMainWindow):
         # ___________Окно возврата билета___________#
 
 
+
 class ReturnTicket(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
