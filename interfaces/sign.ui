@@ -142,7 +142,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Пользователь</string>
+    <string>Клиент</string>
    </property>
   </widget>
  </widget>

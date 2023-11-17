@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Enter(object):
+class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(601, 365)
@@ -70,15 +70,14 @@ class Ui_Enter(object):
         self.lineEdit_2.setPlaceholderText(_translate("Form", "Пароль..."))
         self.radioButton.setText(_translate("Form", "Админ"))
         self.radioButton_2.setText(_translate("Form", "Кассир"))
-        self.radioButton_3.setText(_translate("Form", "Пользователь"))
+        self.radioButton_3.setText(_translate("Form", "Клиент"))
 
 
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
-    ui = Ui_Enter()
+    ui = Ui_Form()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec())
