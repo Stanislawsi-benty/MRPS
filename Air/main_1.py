@@ -361,6 +361,7 @@ class ReturnTicket(UserMain):
         adminWindow.loadTickets()
 
 
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     sign_window = EnterWindow()  # Создание экземпляра окна входа
