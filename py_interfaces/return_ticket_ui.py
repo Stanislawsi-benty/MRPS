@@ -99,7 +99,7 @@ class Ui_Return_ticket_window(object):
         self.lineEdit_patronymic.setPlaceholderText(_translate("Return_ticket_window", "Отчество..."))
         self.lineEdit_flying_number.setPlaceholderText(_translate("Return_ticket_window", "Номер рейса..."))
         self.lineEdit_from.setPlaceholderText(_translate("Return_ticket_window", "Откуда..."))
-        self.lineEdit_date.setPlaceholderText(_translate("Return_ticket_window", "Дата..."))
+        self.lineEdit_date.setPlaceholderText(_translate("Return_ticket_window", "Дата вылета..."))
         self.pushButton_back.setText(_translate("Return_ticket_window", "Назад"))
         self.pushButton_return_ticket.setText(_translate("Return_ticket_window", "Вернуть билет"))
 

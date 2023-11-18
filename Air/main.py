@@ -15,7 +15,6 @@ from py_interfaces.cashier_main_ui import Ui_CashierMainWindow
 
 class EnterWindow(QtWidgets.QMainWindow, Ui_Form):
     """Инициализация класса входа"""
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_Form()
@@ -28,13 +27,13 @@ class EnterWindow(QtWidgets.QMainWindow, Ui_Form):
         self.radio_group.addButton(self.ui.radioButton)
         self.radio_group.addButton(self.ui.radioButton_2)
         self.radio_group.addButton(self.ui.radioButton_3)
-        print(self.radio_group)
         self.base_line_edit = [self.ui.lineEdit, self.ui.lineEdit_2]
         self.ui.lineEdit_2.setEchoMode(QLineEdit.EchoMode.Password)
 
         self.sign_db = CheckThread()
         self.sign_db.my_signal.connect(self.signal_handler)
 
+    '''Функция очистки полей в окне входа и радио кнопок'''
     def cleaning_sign(self, actor):
         for i in self.base_line_edit:
             i.clear()
@@ -49,7 +48,6 @@ class EnterWindow(QtWidgets.QMainWindow, Ui_Form):
         self.radio_group.setExclusive(True)
 
     '''Функция проверки есть ли символы в полях логина и пароля'''
-
     def check_input(funct: Callable):
         def wrapper(self):
             for line_edit in self.base_line_edit:
@@ -60,12 +58,10 @@ class EnterWindow(QtWidgets.QMainWindow, Ui_Form):
         return wrapper
 
     '''Возвращает сигнал(окно) после авторизации и регистрации'''
-
     def signal_handler(self, value_sign):
         QtWidgets.QMessageBox.about(self, 'Оповещение', value_sign)
 
     '''Функция авторизации'''
-
     @check_input
     def auth(self):
         login = self.ui.lineEdit.text()
@@ -89,7 +85,6 @@ class EnterWindow(QtWidgets.QMainWindow, Ui_Form):
             user_window_main.show()
 
     '''Функция регистрации'''
-
     @check_input
     def reg(self):
         login = self.ui.lineEdit.text()
@@ -106,7 +101,6 @@ class EnterWindow(QtWidgets.QMainWindow, Ui_Form):
 
 class AdminWindow(QtWidgets.QMainWindow):
     """Инициализация класса админа"""
-
     def __init__(self):
         super().__init__()
         self.ui = Ui_AdminWindowMain()
@@ -124,31 +118,27 @@ class AdminWindow(QtWidgets.QMainWindow):
         self.loadTickets()
 
     '''Загрузка рейсов в список'''
-
     def loadTickets(self):
         self.ui.listWidget.clearSelection()
         self.ui.listWidget.clear()
         self.value = self.ticket_db.ticket_show()
         self.ui.listWidget.addItems(
             [str(*[f"Номер рейса: {i[1]} | Откуда: {i[2]} | Куда: {i[3]} | Время вылета: {i[4]}"
-                   f" | Дата вылета: {i[5]} | Цена: {i[6]} ₽ | Количество {i[7]}"]) for i in self.value])
+                   f" | Дата вылета: {i[5]} | Цена: {i[6]} ₽ | Количество: {i[7]}"]) for i in self.value])
 
     '''Функция выхода в окно входа'''
-
     @staticmethod
     def to_sign():
         admin_window_main.close()
         sign_window.show()
 
     '''Функция входа в окно добавления рейса'''
-
     @staticmethod
     def addTickets():
         admin_window_main.close()
         admin_add_ticket.show()
 
     '''Функция удаления рейса'''
-
     def delTicket(self):
         current_index = self.ui.listWidget.currentRow()
         item = self.ui.listWidget.item(current_index)
@@ -164,7 +154,6 @@ class AdminWindow(QtWidgets.QMainWindow):
             cashier_window_main.loadTickets()
 
     '''Функция изменение даты вылета в рейсе'''
-
     def change_date(self):
         currentIndex = self.ui.listWidget.currentRow()
         item = self.ui.listWidget.item(currentIndex)
@@ -180,7 +169,6 @@ class AdminWindow(QtWidgets.QMainWindow):
         cashier_window_main.loadTickets()
 
     '''Функция изменение цены в рейсе'''
-
     def change_price(self):
         currentIndex = self.ui.listWidget.currentRow()
         item = self.ui.listWidget.item(currentIndex)
@@ -198,7 +186,6 @@ class AdminWindow(QtWidgets.QMainWindow):
 
 class AdminTicket(AdminWindow):
     """Инициализация класса Админа для добавления билета"""
-
     def __init__(self):
         super().__init__()
         self.ui = Ui_admin_add_ticket()
@@ -213,18 +200,15 @@ class AdminTicket(AdminWindow):
         self.ticket_db.my_signal.connect(self.signal_handler)
 
     '''Функция очистки полей'''
-
     def cleaning(self):
         for i in self.data_lines:
             i.clear()
 
     '''Возвращает сигнал(окно) с сообщением'''
-
     def signal_handler(self, value_admin_ticket):
         QtWidgets.QMessageBox.about(self, 'Оповещение', value_admin_ticket)
 
     '''Функция возврата в главное окно админа'''
-
     def return_to_admin_main(self):
         admin_add_ticket.close()
         self.cleaning()
@@ -234,7 +218,6 @@ class AdminTicket(AdminWindow):
         cashier_window_main.loadTickets()
 
     '''Функция проверки есть ли символы в полях'''
-
     def check_input(funct: Callable):
         def wrapper(self):
             for line_edit in self.data_lines:
@@ -245,7 +228,6 @@ class AdminTicket(AdminWindow):
         return wrapper
 
     '''Функция добавления билета'''
-
     @check_input
     def add_ticket(self):
         where = self.ui.lineEdit_where.text()
@@ -263,7 +245,6 @@ class AdminTicket(AdminWindow):
 
 class UserMain(QtWidgets.QMainWindow):
     """Инициализация класса главного окна клиента"""
-
     def __init__(self):
         super().__init__()
         self.ui = Ui_mainWindow()
@@ -279,24 +260,21 @@ class UserMain(QtWidgets.QMainWindow):
         self.loadTickets()
 
     '''Функция возврата в окно входа'''
-
     @staticmethod
     def to_sign():
         user_window_main.close()
         sign_window.show()
 
     '''Функция возврата в окно входа'''
-
     def loadTickets(self):
         self.ui.listWidget.clearSelection()
         self.ui.listWidget.clear()
         self.value = self.ticket_db.ticket_show()
         self.ui.listWidget.addItems(
             [str(*[f"Номер рейса: {i[1]} | Откуда: {i[2]} | Куда: {i[3]} | Время вылета: {i[4]}"
-                   f" | Дата вылета: {i[5]} | Цена: {i[6]} ₽ | Количество {i[7]}"]) for i in self.value])
+                   f" | Дата вылета: {i[5]} | Цена: {i[6]} ₽ | Количество: {i[7]}"]) for i in self.value])
 
     '''Функция перехода в окно покупки билетов'''
-
     def activate_buy_user(self):
         currentIndex = self.ui.listWidget.currentRow()
         item = self.ui.listWidget.item(currentIndex)
@@ -307,7 +285,6 @@ class UserMain(QtWidgets.QMainWindow):
             buy_window_user.show()
 
     '''Функция перехода в окно возврата билета билетов'''
-
     @staticmethod
     def return_ticket_window():
         user_window_main.close()
@@ -333,12 +310,10 @@ class BuyTicketUser(UserMain):
         self.ui.but_buy_2.clicked.connect(self.back_user_main)
 
     '''Возвращает сигнал(окно) с сообщением'''
-
     def signal_handler(self, value_signal):
         QtWidgets.QMessageBox.about(self, 'Оповещение', value_signal)
 
     '''Функция проверки есть ли символы в полях'''
-
     def check_input(funct: Callable):
         def wrapper(self):
             for line_edit in self.lines_edit:
@@ -349,20 +324,18 @@ class BuyTicketUser(UserMain):
         return wrapper
 
     '''Функция очистки полей'''
-
     def cleaning(self):
         for i in self.lines_edit:
             i.clear()
 
     '''Функция возврата в главное окно клиента'''
-
     def back_user_main(self):
         buy_window_user.close()
+        user_window_main.loadTickets()
         self.cleaning()
         user_window_main.show()
 
     '''Функция покупки билета через клиента'''
-
     @check_input
     def buy_ticket_user(self):
         surname = self.ui.lineEdit.text().title()
@@ -470,7 +443,7 @@ class CashierMain(QtWidgets.QMainWindow):
         self.value = self.ticket_db.ticket_show()
         self.ui.listWidget.addItems(
             [str(*[f"Номер рейса: {i[1]} | Откуда: {i[2]} | Куда: {i[3]} | Время вылета: {i[4]}"
-                   f" | Дата вылета: {i[5]} | Цена: {i[6]} ₽ | Количество {i[7]}"]) for i in self.value])
+                   f" | Дата вылета: {i[5]} | Цена: {i[6]} ₽ | Количество: {i[7]}"]) for i in self.value])
 
     '''Функция возврата в окно входа'''
     @staticmethod

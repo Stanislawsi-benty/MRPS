@@ -98,7 +98,7 @@ class Ui_admin_add_ticket(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Добавление рейса администратором"))
         self.label.setText(_translate("MainWindow", "Введите данные о новом билете:"))
         self.lineEdit_from.setPlaceholderText(_translate("MainWindow", "Откуда..."))
         self.lineEdit_where.setPlaceholderText(_translate("MainWindow", "Куда..."))
