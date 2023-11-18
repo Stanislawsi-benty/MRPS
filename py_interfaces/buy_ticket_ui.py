@@ -10,6 +10,7 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtGui import QIntValidator
+from PyQt6.QtCore import QRegularExpression
 
 
 class Ui_buy_tic(object):
@@ -57,7 +58,9 @@ class Ui_buy_tic(object):
         self.lineEdit_5.setObjectName("textEdit_5")
         self.lineEdit_6 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_6.setPlaceholderText("Номер тел.")
-        self.lineEdit_6.setValidator(QIntValidator())
+        rx = QtCore.QRegularExpression("[0-9]{11}")
+        val = QtGui.QRegularExpressionValidator(rx)
+        self.lineEdit_6.setValidator(val)
         self.lineEdit_6.setGeometry(QtCore.QRect(240, 320, 251, 41))
         self.lineEdit_6.setObjectName("textEdit_6")
         buy_tic.setCentralWidget(self.centralwidget)
@@ -72,7 +75,7 @@ class Ui_buy_tic(object):
 
     def retranslateUi(self, buy_tic):
         _translate = QtCore.QCoreApplication.translate
-        buy_tic.setWindowTitle(_translate("buy_tic", "MainWindow"))
+        buy_tic.setWindowTitle(_translate("buy_tic", "Покупка билета"))
         self.box_gender.setItemText(0, _translate("buy_tic", "МУЖ"))
         self.box_gender.setItemText(1, _translate("buy_tic", "ЖЕН"))
         self.but_buy.setText(_translate("buy_tic", "Купить билет"))

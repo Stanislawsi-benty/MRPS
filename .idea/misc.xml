@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Black">
+<<<<<<< HEAD
     <option name="sdkName" value="Python 3.12 (MyMRPS)" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (Programm)" project-jdk-type="Python SDK" />
+=======
+    <option name="sdkName" value="Python 3.11 (ANDR_MRPS)" />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11" project-jdk-type="Python SDK" />
+  <component name="PyCharmProfessionalAdvertiser">
+    <option name="shown" value="true" />
+  </component>
+>>>>>>> f74e651b7225f4caf7976ba831a68b0f07949568
 </project>

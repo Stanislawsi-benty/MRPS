@@ -1,42 +1,49 @@
 import sqlite3 as sq
-import random
 import pathlib
 from pathlib import Path
-from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore
 
 
 class TicketSet(QtCore.QThread):
-    mysignal = QtCore.pyqtSignal(str)
+    my_signal = QtCore.pyqtSignal(str)
 
     def ticket_add(self, ticket):
-        add_ticket(ticket, self.mysignal)
+        add_ticket(ticket, self.my_signal)
 
-    def ticket_show(self):
+    @staticmethod
+    def ticket_show():
         value = show_tickets()
         return value
 
-    def ticket_del(self, item):
+    @staticmethod
+    def ticket_del(item):
         del_ticket(item)
 
-    def data_change(self, ticket, text):
+    @staticmethod
+    def data_change(ticket, text):
         change_data_ticket(ticket, text)
 
-    def cost_change(self, ticket, cost):
+    @staticmethod
+    def cost_change(ticket, cost):
         change_price_ticket(ticket, cost)
 
     def purchase_ticket(self, data, ticket):
-        client_buy_ticket(data, ticket, self.mysignal)
+        buy_ticket(data, ticket, self.my_signal)
 
     def recovery_ticket(self, information):
-        client_return_ticket(information, self.mysignal)
+        return_ticket(information, self.my_signal)
+
+    def cashier_revenue(self):
+        revenue(self.my_signal)
 
 
 def add_ticket(ticket, signal):
+    """Функция добавления билета"""
     db = sq.connect(Path(pathlib.Path.home(), 'Desktop', 'МРПС', 'Programm', 'database', 'ticket.db'))
     sql = db.cursor()
 
     add_ticket_into = '''INSERT INTO ticket (FLYING_NUMBER, WHERE_FROM, WHERE_TO, TIME, DATE, PRICE, QUANTITY) 
-                         VALUES (?, ?, ?, ?, ?, ?, ?)'''
+                         VALUES (?, ?, ?, ?, ?, ?, ?);'''
     data = (*ticket,)
 
     sql.execute(add_ticket_into, data)
@@ -46,16 +53,18 @@ def add_ticket(ticket, signal):
 
 
 def show_tickets():
+    """Функция вывода билетов"""
     db = sq.connect(Path(pathlib.Path.home(), 'Desktop', 'МРПС', 'Programm', 'database', 'ticket.db'))
     sql = db.cursor()
 
-    sql.execute(f'''SELECT * FROM ticket;''')
+    sql.execute('''SELECT * FROM ticket;''')
     value = sql.fetchall()
 
     return value
 
 
 def del_ticket(ticket):
+    """Функция удаления билета"""
     db = sq.connect(Path(pathlib.Path.home(), 'Desktop', 'МРПС', 'Programm', 'database', 'ticket.db'))
     sql = db.cursor()
 
@@ -67,6 +76,7 @@ def del_ticket(ticket):
 
 
 def change_data_ticket(ticket, date):
+    """Функция изменение даты в билете"""
     db = sq.connect(Path(pathlib.Path.home(), 'Desktop', 'МРПС', 'Programm', 'database', 'ticket.db'))
     sql = db.cursor()
     flying_number = ticket[0].split(':')[1].strip()
@@ -80,6 +90,7 @@ def change_data_ticket(ticket, date):
 
 
 def change_price_ticket(ticket, price):
+    """Функция изменения цены в билете"""
     db = sq.connect(Path(pathlib.Path.home(), 'Desktop', 'МРПС', 'Programm', 'database', 'ticket.db'))
     sql = db.cursor()
     flying_number = ticket[0].split(':')[1].strip()
@@ -92,7 +103,8 @@ def change_price_ticket(ticket, price):
     db.commit()
 
 
-def client_buy_ticket(data, ticket, signal):
+def buy_ticket(data, ticket, signal):
+    """Функция покупки билета от клиента"""
     db = sq.connect(Path(pathlib.Path.home(), 'Desktop', 'МРПС', 'Programm', 'database', 'ticket.db'))
     sql = db.cursor()
 
@@ -103,15 +115,15 @@ def client_buy_ticket(data, ticket, signal):
     value = sql.fetchone()
 
     if int(*value) > 0:
-        buy_ticket = '''INSERT INTO sold_tickets (SURNAME, NAME, PATRONYMIC, GENDER, BIRTHDAY, CITIZENSHIP, PASSPORT, PHONE,
-                    FLYING_NUMBER, WHERE_FROM, WHERE_TO, TIME, DATE, PRICE)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'''
+        buy_ticket_request = '''INSERT INTO sold_tickets (SURNAME, NAME, PATRONYMIC, GENDER, BIRTHDAY, CITIZENSHIP, 
+                                PASSPORT, PHONE, FLYING_NUMBER, WHERE_FROM, WHERE_TO, TIME, DATE, PRICE)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'''
 
         data_client = (*[int(i) if i.isdigit() else str(i) for i in data],
                        *[int(i.split(':', 1)[1].strip()) if i.split(':', 1)[1].strip().isdigit()
                          else str(i.split(':', 1)[1].strip()) for i in ticket[:5]],
                        int(ticket[5].split()[1]))
-        sql.execute(buy_ticket, data_client)
+        sql.execute(buy_ticket_request, data_client)
         signal.emit("Благодарим за покупку!" + '\n' + "Приятного полета!")
 
         up_quantity = '''UPDATE ticket set QUANTITY = ? WHERE FLYING_NUMBER = ? AND TIME = ? AND DATE = ?;'''
@@ -124,12 +136,13 @@ def client_buy_ticket(data, ticket, signal):
     db.commit()
 
 
-def client_return_ticket(information, signal):
+def return_ticket(information, signal):
+    """Функция возврата билета от клиента"""
     db = sq.connect(Path(pathlib.Path.home(), 'Desktop', 'МРПС', 'Programm', 'database', 'ticket.db'))
     sql = db.cursor()
 
-    request_ticket = '''SELECT * FROM sold_tickets WHERE SURNAME = ? AND NAME = ? AND PATRONYMIC = ? AND FLYING_NUMBER = ? AND 
-                 WHERE_FROM = ? AND DATE = ?;'''
+    request_ticket = '''SELECT * FROM sold_tickets WHERE SURNAME = ? AND NAME = ? AND PATRONYMIC = ? AND 
+                        FLYING_NUMBER = ? AND WHERE_FROM = ? AND DATE = ?;'''
     info_1 = (*information,)
 
     sql.execute(request_ticket, info_1)
@@ -157,6 +170,16 @@ def client_return_ticket(information, signal):
 
     db.commit()
 
+
+def revenue(signal):
+    """Функция подсчета дневной выручки"""
+    db = sq.connect(Path(pathlib.Path.home(), 'Desktop', 'МРПС', 'Programm', 'database', 'ticket.db'))
+    sql = db.cursor()
+
+    sql.execute('''SELECT PRICE FROM sold_tickets;''')
+    value_revenue = sql.fetchall()
+
+    signal.emit(f"Дневная выручка составляет: {sum([int(*i) for i in value_revenue])} рублей")
 
 # def start():
 #     db = sq.connect(Path(pathlib.Path.home(), 'Desktop', 'МРПС', 'Programm', 'database', 'ticket.db'))
@@ -198,6 +221,3 @@ def client_return_ticket(information, signal):
 #     );''')
 #
 #     db.commit()
-
-# if __name__ == '__main__':
-#     client_buy_ticket(1, 2, 3)
