@@ -1,5 +1,5 @@
 # Project designed for the discipline methods of software systems development  
-It implements a mini-application for air tickets with master interfaces of the administrator, client and cashier. Written in Python using the PyQt6 library, also consists of SQLite3 databases
+It implements a mini-application for air tickets with master interfaces of the administrator, client and cashier. Written in Python using the PyQt6 library, also consists of SQLite3 databases. The interfaces were created in Qt Designer
 
 # For start you need:
   1. Download files in local repository
